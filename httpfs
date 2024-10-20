@@ -15,6 +15,7 @@ import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument("urls", nargs="+")
+parser.add_argument("--header", action='append')
 args = parser.parse_args()
 
 
@@ -105,6 +106,9 @@ sizes = []
 
 print(f"Got {len(args.urls)} parts.")
 session = requests.Session()
+for header in args.header:
+    header_name, header_value = header.split(':',1)
+    session.headers[header_name] = header_value.lstrip()
 for i, url in enumerate(args.urls):
     if i in (0, len(args.urls) - 1):
         r = session.head(url, allow_redirects=True)
